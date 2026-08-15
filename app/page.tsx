@@ -62,6 +62,10 @@ const faqs = [
     q: "Is this legal?",
     a: "Yes. These are public building permits. We do not sell moving jobs or real-estate listing packs.",
   },
+  {
+    q: "Can I get another free week?",
+    a: "No. One free week per shop. Same email or phone does not get a second list. After that it is $99 a month. Cancel by text.",
+  },
 ];
 
 export default function Home() {

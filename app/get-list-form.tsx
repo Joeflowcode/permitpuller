@@ -1,9 +1,18 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
+import { SIGNUP_STORAGE } from "../lib/signup";
+
+type Status = "idle" | "sending" | "sent" | "already" | "invalid" | "error";
 
 export function GetListForm() {
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [status, setStatus] = useState<Status>("idle");
+
+  useEffect(() => {
+    if (window.localStorage.getItem(SIGNUP_STORAGE) === "1") {
+      setStatus("already");
+    }
+  }, []);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -12,20 +21,30 @@ export function GetListForm() {
     setStatus("sending");
 
     try {
-      const params = new URLSearchParams();
-      for (const [key, value] of formData.entries()) {
-        if (typeof value === "string") {
-          params.append(key, value);
-        }
-      }
-      const response = await fetch("/__forms.html", {
+      const response = await fetch("/api/signup", {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: params.toString(),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: String(formData.get("name") || ""),
+          trade: String(formData.get("trade") || ""),
+          contact: String(formData.get("contact") || ""),
+          "bot-field": String(formData.get("bot-field") || ""),
+        }),
       });
-      if (!response.ok) {
+      const data = (await response.json().catch(() => ({}))) as { status?: string };
+      if (data.status === "already") {
+        window.localStorage.setItem(SIGNUP_STORAGE, "1");
+        setStatus("already");
+        return;
+      }
+      if (data.status === "invalid") {
+        setStatus("invalid");
+        return;
+      }
+      if (!response.ok || data.status !== "ok") {
         throw new Error("Form submission failed");
       }
+      window.localStorage.setItem(SIGNUP_STORAGE, "1");
       setStatus("sent");
       form.reset();
     } catch {
@@ -38,7 +57,19 @@ export function GetListForm() {
       <div className="form-success">
         <h3>You are on the list.</h3>
         <p className="muted">
-          If you want it faster, text <a href="tel:5414252008">541-425-2008</a>.
+          One free week per shop. If you want it faster, text <a href="tel:5414252008">541-425-2008</a>.
+        </p>
+      </div>
+    );
+  }
+
+  if (status === "already") {
+    return (
+      <div className="form-success">
+        <h3>You already used the free week.</h3>
+        <p className="muted">
+          Same email or phone does not get another list. If the Monday email is useful, it is $99 a month. Text{" "}
+          <a href="tel:5414252008">541-425-2008</a> and Joey will send the Stripe link.
         </p>
       </div>
     );
@@ -83,6 +114,11 @@ export function GetListForm() {
       <button className="btn btn-dark" type="submit" style={{ width: "100%" }} disabled={status === "sending"}>
         {status === "sending" ? "Sending…" : "Send me the free week"}
       </button>
+      {status === "invalid" ? (
+        <p className="muted" style={{ marginTop: 12 }}>
+          Use a real email or a 10-digit phone. Text <a href="tel:5414252008">541-425-2008</a> if that is easier.
+        </p>
+      ) : null}
       {status === "error" ? (
         <p className="muted" style={{ marginTop: 12 }}>
           That did not send. Text <a href="tel:5414252008">541-425-2008</a> or email{" "}
