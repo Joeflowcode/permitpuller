@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { clearAdminCookie, isAdmin, passwordOk, setAdminCookie } from "./auth";
-import { classify, parseTrades, type Status, type Trade } from "./classify";
+import { classify, isPortlandCity, parseTrades, type Status, type Trade } from "./classify";
 import { mapPortlandRow, parseCsv } from "./csv";
 import { prisma } from "./db";
 
@@ -41,8 +41,11 @@ export async function addPermitAction(formData: FormData) {
 
   const classified = classify({ city, address, permitType, work, applicant });
   const override = manual !== "auto";
-  const status = override ? (manual as Status) : classified.status;
-  const trades = classified.trades;
+  let status = override ? (manual as Status) : classified.status;
+  if (isPortlandCity(city) && status === "mine") {
+    status = "sell";
+  }
+  const trades = classified.trades.filter((trade) => trade !== "dumpster" || isPortlandCity(city));
 
   await prisma.permit.create({
     data: {
@@ -95,8 +98,13 @@ export async function importCsvAction(formData: FormData) {
 export async function setStatusAction(formData: FormData) {
   await requireAdmin();
   const id = String(formData.get("id") || "");
-  const status = String(formData.get("status") || "") as Status;
+  let status = String(formData.get("status") || "") as Status;
   if (!id || !["mine", "sell", "skip"].includes(status)) return;
+  const row = await prisma.permit.findUnique({ where: { id } });
+  if (!row) return;
+  if (isPortlandCity(row.city) && status === "mine") {
+    status = "sell";
+  }
   await prisma.permit.update({
     where: { id },
     data: { status, override: true },
@@ -111,6 +119,7 @@ export async function toggleTradeAction(formData: FormData) {
   if (!id || !trade) return;
   const row = await prisma.permit.findUnique({ where: { id } });
   if (!row) return;
+  if (trade === "dumpster" && !isPortlandCity(row.city)) return;
   const trades = parseTrades(row.trades);
   const next = trades.includes(trade)
     ? trades.filter((t) => t !== trade)

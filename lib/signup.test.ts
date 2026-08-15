@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { isUsableContact, normalizeContact } from "./signup";
+import { isUsableContact, normalizeContact, signupContactKey } from "./signup";
 
 describe("normalizeContact", () => {
   it("treats the same Gmail with dots or plus tags as one shop", () => {
@@ -26,5 +26,11 @@ describe("normalizeContact", () => {
 
   it("trims and lowercases email", () => {
     assert.equal(normalizeContact("  SAM@Shop.COM  ").key, "email:sam@shop.com");
+  });
+
+  it("keeps Salem and Portland free weeks on separate keys", () => {
+    const key = normalizeContact("sam@shop.com").key;
+    assert.equal(signupContactKey("salem", key), key);
+    assert.equal(signupContactKey("portland", key), `portland:${key}`);
   });
 });

@@ -1,18 +1,28 @@
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
-import { SIGNUP_STORAGE } from "../lib/signup";
+import { signupStorageKey, type SignupCity } from "../lib/signup";
 
 type Status = "idle" | "sending" | "sent" | "already" | "invalid" | "error";
 
-export function GetListForm() {
+export function GetListForm({
+  city = "salem",
+  subject = "PERMIT LIST",
+  priceLabel = "$99 a month",
+}: {
+  city?: SignupCity;
+  subject?: string;
+  priceLabel?: string;
+}) {
   const [status, setStatus] = useState<Status>("idle");
+  const storageKey = signupStorageKey(city);
+  const includeDumpster = city === "portland";
 
   useEffect(() => {
-    if (window.localStorage.getItem(SIGNUP_STORAGE) === "1") {
+    if (window.localStorage.getItem(storageKey) === "1") {
       setStatus("already");
     }
-  }, []);
+  }, [storageKey]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -28,12 +38,14 @@ export function GetListForm() {
           name: String(formData.get("name") || ""),
           trade: String(formData.get("trade") || ""),
           contact: String(formData.get("contact") || ""),
+          city,
+          subject,
           "bot-field": String(formData.get("bot-field") || ""),
         }),
       });
       const data = (await response.json().catch(() => ({}))) as { status?: string };
       if (data.status === "already") {
-        window.localStorage.setItem(SIGNUP_STORAGE, "1");
+        window.localStorage.setItem(storageKey, "1");
         setStatus("already");
         return;
       }
@@ -44,7 +56,7 @@ export function GetListForm() {
       if (!response.ok || data.status !== "ok") {
         throw new Error("Form submission failed");
       }
-      window.localStorage.setItem(SIGNUP_STORAGE, "1");
+      window.localStorage.setItem(storageKey, "1");
       setStatus("sent");
       form.reset();
     } catch {
@@ -68,7 +80,7 @@ export function GetListForm() {
       <div className="form-success">
         <h3>You already used the free week.</h3>
         <p className="muted">
-          Same email or phone does not get another list. If the Monday email is useful, it is $99 a month. Text{" "}
+          Same email or phone does not get another list. If the Monday email is useful, it is {priceLabel}. Text{" "}
           <a href="tel:5414252008">541-425-2008</a> and Joey will send the Stripe link.
         </p>
       </div>
@@ -85,7 +97,8 @@ export function GetListForm() {
       className="form-card"
     >
       <input type="hidden" name="form-name" value="permit-list" />
-      <input type="hidden" name="subject" value="PERMIT LIST" />
+      <input type="hidden" name="subject" value={subject} />
+      <input type="hidden" name="city" value={city} />
       <p style={{ display: "none" }}>
         <label>
           Don&apos;t fill this out: <input name="bot-field" />
@@ -104,6 +117,7 @@ export function GetListForm() {
           <option>Paint</option>
           <option>Landscape</option>
           <option>Windows</option>
+          {includeDumpster ? <option>Dumpster</option> : null}
           <option>Other</option>
         </select>
       </label>

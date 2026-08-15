@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-export function SiteHeader() {
+export function SiteHeader({ city = "salem" }: { city?: "salem" | "portland" }) {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -15,10 +15,21 @@ export function SiteHeader() {
   return (
     <header className={`site-header${scrolled ? " is-scrolled" : ""}`}>
       <div className="wrap site-header-inner">
-        <a href="/" className="brand">
-          <span className="brand-mark" aria-hidden="true" />
-          Salem Permit List
-        </a>
+        <div className="brand-row">
+          <a href={city === "portland" ? "/portland" : "/"} className="brand">
+            <span className="brand-mark" aria-hidden="true" />
+            {city === "portland" ? "Portland Permit List" : "Salem Permit List"}
+          </a>
+          {city === "portland" ? (
+            <a href="/" className="city-switch">
+              Salem
+            </a>
+          ) : (
+            <a href="/portland" className="city-switch">
+              Portland
+            </a>
+          )}
+        </div>
         <nav className="site-nav">
           <a href="#how">How it works</a>
           <a href="#who">Who it&apos;s for</a>

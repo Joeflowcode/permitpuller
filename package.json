@@ -7,7 +7,7 @@
     "build": "prisma generate && prisma db push && tsx prisma/seed.ts && next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "tsx --test lib/signup.test.ts",
+    "test": "tsx --test lib/signup.test.ts lib/classify.test.ts",
     "db:seed": "prisma db push && tsx prisma/seed.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "netlify database migrations apply"

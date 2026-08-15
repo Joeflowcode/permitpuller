@@ -1,5 +1,9 @@
 export const HAUL_CITIES = new Set(["salem", "keizer", "stayton", "lyons"]);
 
+export function isPortlandCity(city: string) {
+  return city.trim().toLowerCase() === "portland";
+}
+
 export type Trade =
   | "flooring"
   | "hvac"
@@ -133,6 +137,7 @@ function dropNamedTradeChips(trades: Trade[], applicant: string) {
 export function classify(p: PermitInput): ClassifyResult {
   const text = blob(p);
   const haul = isHaulCity(p.city);
+  const portland = isPortlandCity(p.city);
 
   if (shouldSkip(p)) return { status: "skip", trades: [] };
 
@@ -144,9 +149,7 @@ export function classify(p: PermitInput): ClassifyResult {
   ) {
     if (isRoofingCompany(p.applicant)) return { status: "skip", trades: [] };
     const trades: Trade[] = ["roofing"];
-    return haul
-      ? { status: "mine", trades }
-      : { status: "sell", trades };
+    return haul && !portland ? { status: "mine", trades } : { status: "sell", trades };
   }
 
   let trades: Trade[] = [];
@@ -177,8 +180,16 @@ export function classify(p: PermitInput): ClassifyResult {
   trades = dropNamedTradeChips(trades, p.applicant);
   trades = uniq(trades).filter((t) => ALL_TRADES.includes(t));
 
-  if (isDemo(text) && !haul) {
+  if (isDemo(text) && portland) {
     return { status: "sell", trades: uniq(["dumpster", ...trades]) };
+  }
+
+  if (isDemo(text) && !haul) {
+    return { status: "sell", trades };
+  }
+
+  if (portland && (isInterior(text) || isAddition(text) || isPool(text) || trades.length)) {
+    return { status: "sell", trades };
   }
 
   if (haul && (isDemo(text) || isInterior(text) || isAddition(text) || isPool(text))) {
@@ -199,12 +210,14 @@ export function parseTrades(raw: string): Trade[] {
   }
 }
 
-export function isMineRow(status: string) {
+export function isMineRow(status: string, city = "") {
+  if (isPortlandCity(city)) return false;
   return status === "mine";
 }
 
-export function isSellRow(status: string, trades: Trade[]) {
+export function isSellRow(status: string, trades: Trade[], city = "") {
   if (status === "skip") return false;
+  if (isPortlandCity(city)) return true;
   if (status === "sell") return true;
   return status === "mine" && trades.length > 0;
 }

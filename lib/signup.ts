@@ -2,6 +2,20 @@ export const SIGNUP_COOKIE = "spl_signup";
 export const SIGNUP_STORAGE = "spl_signup";
 export const SIGNUP_COOKIE_MAX_AGE = 60 * 60 * 24 * 180;
 
+export type SignupCity = "salem" | "portland";
+
+export function signupCookieName(city: SignupCity) {
+  return city === "portland" ? "spl_signup_portland" : SIGNUP_COOKIE;
+}
+
+export function signupStorageKey(city: SignupCity) {
+  return city === "portland" ? "spl_signup_portland" : SIGNUP_STORAGE;
+}
+
+export function signupContactKey(city: SignupCity, normalizedKey: string) {
+  return city === "portland" ? `portland:${normalizedKey}` : normalizedKey;
+}
+
 export type ContactKind = "email" | "phone" | "unknown";
 
 export type NormalizedContact = {

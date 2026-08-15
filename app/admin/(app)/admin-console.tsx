@@ -8,7 +8,7 @@ import {
   toggleTradeAction,
 } from "@/lib/actions";
 import type { Trade } from "@/lib/classify";
-import { isMineRow, isSellRow } from "@/lib/classify";
+import { isMineRow, isPortlandCity, isSellRow } from "@/lib/classify";
 import { useMemo, useState, type CSSProperties, type ReactNode } from "react";
 
 type PermitRow = {
@@ -43,7 +43,7 @@ export function AdminConsole({ permits }: { permits: PermitRow[] }) {
 
   const mine = useMemo(() => {
     return permits
-      .filter((p) => isMineRow(p.status))
+      .filter((p) => isMineRow(p.status, p.city))
       .sort((a, b) => {
         const ad = /demo/i.test(a.permitType) || /demo/i.test(a.work) ? 0 : 1;
         const bd = /demo/i.test(b.permitType) || /demo/i.test(b.work) ? 0 : 1;
@@ -54,7 +54,7 @@ export function AdminConsole({ permits }: { permits: PermitRow[] }) {
 
   const sell = useMemo(() => {
     return permits
-      .filter((p) => isSellRow(p.status, p.trades))
+      .filter((p) => isSellRow(p.status, p.trades, p.city))
       .filter((p) => (tradeFilter === "all" ? true : p.trades.includes(tradeFilter)))
       .sort((a, b) => b.issuedOn.localeCompare(a.issuedOn));
   }, [permits, tradeFilter]);
@@ -213,7 +213,7 @@ function PermitTable({ rows, mode }: { rows: PermitRow[]; mode: "mine" | "sell" 
               <td style={td}>
                 {mode === "sell" ? (
                   <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-                    {TRADE_FILTERS.map((trade) => (
+                    {TRADE_FILTERS.filter((trade) => trade !== "dumpster" || isPortlandCity(row.city)).map((trade) => (
                       <form action={toggleTradeAction} key={trade}>
                         <input type="hidden" name="id" value={row.id} />
                         <input type="hidden" name="trade" value={trade} />
@@ -229,7 +229,7 @@ function PermitTable({ rows, mode }: { rows: PermitRow[]; mode: "mine" | "sell" 
               </td>
               <td style={td}>
                 <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-                  {mode === "sell" ? (
+                  {mode === "sell" && !isPortlandCity(row.city) ? (
                     <form action={setStatusAction}>
                       <input type="hidden" name="id" value={row.id} />
                       <input type="hidden" name="status" value="mine" />

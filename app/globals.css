@@ -78,6 +78,13 @@ a {
   padding: 16px 0;
 }
 
+.brand-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
 .brand {
   display: inline-flex;
   align-items: center;
@@ -85,6 +92,15 @@ a {
   text-decoration: none;
   font-weight: 750;
   letter-spacing: -0.03em;
+}
+
+.city-switch {
+  color: #e8a532;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-decoration: none;
+  text-transform: uppercase;
 }
 
 .brand-mark {
