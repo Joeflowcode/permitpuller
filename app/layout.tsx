@@ -35,6 +35,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           fontFamily: "var(--font-sans), system-ui, sans-serif",
         }}
       >
+        <div className="grain" aria-hidden="true" />
         {children}
       </body>
     </html>

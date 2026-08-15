@@ -14,28 +14,28 @@ export default function Image() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          background: "#1f3d32",
-          color: "#f3efe6",
+          background: "#10241e",
+          color: "#f4efe3",
           padding: "72px 80px",
-          borderBottom: "16px solid #c97d1a",
+          borderBottom: "14px solid #c97d1a",
         }}
       >
         <div
           style={{
             color: "#e8a532",
-            fontSize: 28,
+            fontSize: 24,
             fontWeight: 800,
-            letterSpacing: 4,
+            letterSpacing: 6,
             textTransform: "uppercase",
-            marginBottom: 18,
+            marginBottom: 22,
           }}
         >
           Salem · Keizer · Stayton · Lyons · Albany
         </div>
-        <div style={{ fontSize: 72, lineHeight: 1.05, fontWeight: 650, maxWidth: 980 }}>
+        <div style={{ fontSize: 76, lineHeight: 0.98, fontWeight: 650, maxWidth: 980 }}>
           New Salem remodel permits, every Monday.
         </div>
-        <div style={{ fontSize: 30, marginTop: 24, color: "rgba(243,239,230,0.86)", maxWidth: 860 }}>
+        <div style={{ fontSize: 28, marginTop: 28, color: "rgba(244,239,227,0.78)", maxWidth: 820 }}>
           Address, what they pulled, who applied. First week free. $99 a month.
         </div>
       </div>

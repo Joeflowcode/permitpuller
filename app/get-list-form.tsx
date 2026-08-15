@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type CSSProperties, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 
 export function GetListForm() {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
@@ -35,9 +35,9 @@ export function GetListForm() {
 
   if (status === "sent") {
     return (
-      <div style={{ ...card, padding: 24 }}>
-        <h3 style={{ margin: "0 0 8px" }}>You are on the list.</h3>
-        <p style={muted}>
+      <div className="form-success">
+        <h3>You are on the list.</h3>
+        <p className="muted">
           If you want it faster, text <a href="tel:5414252008">541-425-2008</a>.
         </p>
       </div>
@@ -51,7 +51,7 @@ export function GetListForm() {
       data-netlify="true"
       netlify-honeypot="bot-field"
       onSubmit={handleSubmit}
-      style={{ ...card, padding: 24 }}
+      className="form-card"
     >
       <input type="hidden" name="form-name" value="permit-list" />
       <input type="hidden" name="subject" value="PERMIT LIST" />
@@ -60,13 +60,13 @@ export function GetListForm() {
           Don&apos;t fill this out: <input name="bot-field" />
         </label>
       </p>
-      <label style={label}>
+      <label className="field">
         Name
-        <input name="name" required style={input} />
+        <input name="name" required />
       </label>
-      <label style={label}>
+      <label className="field">
         Trade
-        <select name="trade" required style={input} defaultValue="Flooring">
+        <select name="trade" required defaultValue="Flooring">
           <option>Flooring</option>
           <option>HVAC</option>
           <option>Fence</option>
@@ -76,15 +76,15 @@ export function GetListForm() {
           <option>Other</option>
         </select>
       </label>
-      <label style={label}>
+      <label className="field">
         Email or phone
-        <input name="contact" required style={input} />
+        <input name="contact" required />
       </label>
-      <button className="btn btn-dark" type="submit" style={{ marginTop: 12, width: "100%" }} disabled={status === "sending"}>
+      <button className="btn btn-dark" type="submit" style={{ width: "100%" }} disabled={status === "sending"}>
         {status === "sending" ? "Sending…" : "Send me the free week"}
       </button>
       {status === "error" ? (
-        <p style={{ ...muted, marginTop: 12 }}>
+        <p className="muted" style={{ marginTop: 12 }}>
           That did not send. Text <a href="tel:5414252008">541-425-2008</a> or email{" "}
           <a href="mailto:joeymcveigh150@gmail.com?subject=PERMIT%20LIST">joeymcveigh150@gmail.com</a>.
         </p>
@@ -92,25 +92,3 @@ export function GetListForm() {
     </form>
   );
 }
-
-const muted: CSSProperties = { color: "#5b645c", margin: 0, lineHeight: 1.55 };
-
-const card: CSSProperties = {
-  background: "#faf8f3",
-  border: "1px solid #d8d2c6",
-  borderRadius: 8,
-  padding: 22,
-};
-
-const label: CSSProperties = { display: "block", fontWeight: 700, margin: "0 0 14px" };
-
-const input: CSSProperties = {
-  display: "block",
-  width: "100%",
-  marginTop: 6,
-  padding: "12px",
-  border: "1px solid #ccc4b6",
-  borderRadius: 6,
-  font: "inherit",
-  background: "#fff",
-};
