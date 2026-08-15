@@ -16,12 +16,12 @@ const publicSans = Public_Sans({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://salem-permit-list.netlify.app"),
-  title: "Salem Permit List | New remodel and demo permits every Monday",
+  title: "Salem Permit List | New remodel permits every Monday",
   description:
-    "Address. What they pulled. Who applied. Weekly Salem building permits for flooring, HVAC, fence, paint, landscape, and windows. First week free.",
+    "Address, what they pulled, who applied. Weekly Salem building permits for flooring, HVAC, fence, paint, landscape, and windows. First week free. $99 a month.",
   openGraph: {
     title: "Salem Permit List",
-    description: "New Salem remodel and demo permits, every Monday. First week free.",
+    description: "New Salem remodel permits, every Monday. First week free.",
     type: "website",
     locale: "en_US",
   },

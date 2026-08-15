@@ -37,7 +37,9 @@ export function GetListForm() {
     return (
       <div style={{ ...card, padding: 24 }}>
         <h3 style={{ margin: "0 0 8px" }}>You are on the list.</h3>
-        <p style={muted}>Joey will send next Monday&apos;s permits. Or text 541-425-2008 if you want it sooner.</p>
+        <p style={muted}>
+          If you want it faster, text <a href="tel:5414252008">541-425-2008</a>.
+        </p>
       </div>
     );
   }
@@ -79,7 +81,7 @@ export function GetListForm() {
         <input name="contact" required style={input} />
       </label>
       <button className="btn btn-dark" type="submit" style={{ marginTop: 12, width: "100%" }} disabled={status === "sending"}>
-        {status === "sending" ? "Sending…" : "Get the first week free"}
+        {status === "sending" ? "Sending…" : "Send me the free week"}
       </button>
       {status === "error" ? (
         <p style={{ ...muted, marginTop: 12 }}>

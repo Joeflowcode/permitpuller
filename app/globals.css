@@ -59,3 +59,34 @@ body {
   background: var(--forest);
   color: #fff;
 }
+
+.sticky-mobile-bar {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  body {
+    padding-bottom: 84px;
+  }
+
+  .sticky-mobile-bar {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 30;
+    gap: 8px;
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+    background: #1f3d32;
+    border-top: 2px solid #c97d1a;
+  }
+
+  .sticky-mobile-bar.is-hidden {
+    display: none;
+  }
+
+  .sticky-mobile-bar .btn {
+    flex: 1;
+  }
+}

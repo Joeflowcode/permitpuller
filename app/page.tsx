@@ -1,7 +1,14 @@
 import type { CSSProperties } from "react";
 import { GetListForm } from "./get-list-form";
+import { StickyMobileBar } from "./sticky-mobile-bar";
+import { TextJoeyLink } from "./text-joey-link";
+
+const stripePaymentLink =
+  process.env.NEXT_PUBLIC_STRIPE_PAYMENT_LINK || process.env.STRIPE_PAYMENT_LINK || "";
 
 export default function Home() {
+  const payHref = stripePaymentLink || "#get-list";
+
   return (
     <>
       <header
@@ -51,7 +58,7 @@ export default function Home() {
       <section style={{ background: "#1f3d32", color: "#fff", padding: "72px 0 80px" }}>
         <div className="wrap">
           <p style={{ color: "#e8a532", fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", margin: 0 }}>
-            Salem · Keizer · nearby
+            Salem · Keizer · Stayton · Lyons · Albany
           </p>
           <h1
             style={{
@@ -63,20 +70,18 @@ export default function Home() {
               margin: "12px 0 18px",
             }}
           >
-            New Salem remodel and demo permits, every Monday.
+            New Salem remodel permits, every Monday.
           </h1>
           <p style={{ fontSize: "1.15rem", maxWidth: 640, color: "rgba(255,255,255,.86)" }}>
-            Address. What they pulled. Who applied. Sent to your inbox. First week free.
+            Address, what they pulled, who applied. Kitchen guts for flooring. Additions for HVAC and fence. First week
+            free.
           </p>
           <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 28 }}>
-            <a className="btn btn-primary" href="#get-list">
+            <TextJoeyLink className="btn btn-primary">Text Joey — 541-425-2008</TextJoeyLink>
+            <a className="btn btn-secondary" href="#get-list">
               Get the first week free
             </a>
-            <a className="btn btn-secondary" href="tel:5414252008">
-              Call Joey
-            </a>
           </div>
-          <p style={{ marginTop: 22, color: "rgba(255,255,255,.75)" }}>Salem · Keizer · Stayton · Lyons · Albany</p>
         </div>
       </section>
 
@@ -109,15 +114,15 @@ export default function Home() {
           <div style={grid3}>
             <article style={card}>
               <h3 style={h3}>Flooring</h3>
-              <p style={muted}>Interior alterations and kitchen/bath guts.</p>
+              <p style={muted}>Kitchen and bath guts. You call before the GC flooring guy is locked in.</p>
             </article>
             <article style={card}>
               <h3 style={h3}>HVAC</h3>
-              <p style={muted}>New construction and additions. Not other HVAC permits.</p>
+              <p style={muted}>New houses and additions. Not other HVAC permits. That shop already has the mechanical.</p>
             </article>
             <article style={card}>
               <h3 style={h3}>Fence</h3>
-              <p style={muted}>Pool permits and additions (barrier jobs).</p>
+              <p style={muted}>New pools and additions. Oregon wants a barrier. That is your job.</p>
             </article>
             <article style={card}>
               <h3 style={h3}>Paint</h3>
@@ -141,45 +146,47 @@ export default function Home() {
           <div style={grid3}>
             <article style={card}>
               <p style={num}>1</p>
-              <h3 style={h3}>You text or email Joey.</h3>
+              <h3 style={h3}>
+                Text <a href="tel:5414252008">541-425-2008</a> or email{" "}
+                <a href="mailto:joeymcveigh150@gmail.com">joeymcveigh150@gmail.com</a>. Say what you do.
+              </h3>
             </article>
             <article style={card}>
               <p style={num}>2</p>
-              <h3 style={h3}>You get the first week free.</h3>
+              <h3 style={h3}>You get next Monday list free.</h3>
             </article>
             <article style={card}>
               <p style={num}>3</p>
-              <h3 style={h3}>If it is useful, it is $99 a month. Cancel by text.</h3>
+              <h3 style={h3}>If it is useful, pay $99/month on Stripe. Cancel by text.</h3>
             </article>
           </div>
         </div>
       </section>
 
       <section id="price" style={{ padding: "72px 0", background: "#ebe6db" }}>
-        <div className="wrap">
+        <div className="wrap" style={{ maxWidth: 560 }}>
           <h2 style={h2}>Price</h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 16 }}>
-            <article style={{ ...card, padding: 28 }}>
-              <h3 style={h3}>Weekly list</h3>
-              <p style={{ fontSize: "2.2rem", fontWeight: 800, margin: "8px 0" }}>$99 / month</p>
-              <p style={muted}>Every new remodel, demo, addition, and pool permit we pull for Salem.</p>
-              <p style={{ ...muted, marginTop: 12 }}>First week free.</p>
-            </article>
-            <article style={{ ...card, padding: 28 }}>
-              <h3 style={h3}>One address</h3>
-              <p style={{ fontSize: "2.2rem", fontWeight: 800, margin: "8px 0" }}>$35</p>
-              <p style={muted}>If you only want one job this month.</p>
-            </article>
-          </div>
-          <p style={{ ...muted, marginTop: 22 }}>
-            Pay Pal, Venmo, or Cash App to joeymcveigh150@gmail.com. No card form on this site.
+          <article style={{ ...card, padding: 28 }}>
+            <p style={{ fontSize: "2.4rem", fontWeight: 800, margin: "0 0 8px" }}>$99 / month</p>
+            <p style={muted}>Monday list of new Salem remodel, addition, demo, and pool permits.</p>
+            <p style={{ ...muted, marginTop: 12 }}>First week free. Cancel by text.</p>
+            <a className="btn btn-dark" href={payHref} style={{ marginTop: 22, width: "100%" }}>
+              Pay $99 / month
+            </a>
+            <p style={{ ...muted, marginTop: 14 }}>Pay after you see the free week. Stripe. No contract.</p>
+            {stripePaymentLink ? null : (
+              <p style={{ ...muted, marginTop: 10 }}>Joey will text you the Stripe link after your free week.</p>
+            )}
+          </article>
+          <p style={{ ...muted, marginTop: 16 }}>
+            Need one address this month? $35. <TextJoeyLink>Text Joey</TextJoeyLink>.
           </p>
         </div>
       </section>
 
       <section style={{ padding: "72px 0" }}>
         <div className="wrap">
-          <h2 style={h2}>Sample row</h2>
+          <h2 style={h2}>Sample</h2>
           <p
             style={{
               display: "inline-block",
@@ -191,7 +198,7 @@ export default function Home() {
               marginBottom: 16,
             }}
           >
-            Example, not this week&apos;s list
+            Real Salem permits. Not this Monday email.
           </p>
           <div style={{ overflowX: "auto", background: "#faf8f3", border: "1px solid #d8d2c6", borderRadius: 8 }}>
             <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 520 }}>
@@ -222,7 +229,7 @@ export default function Home() {
             </table>
           </div>
           <p style={{ ...muted, marginTop: 16 }}>
-            Real Salem permits. The Monday email looks like this, with the applicant name added when the city has it.
+            Your Monday email looks like this, with the applicant name when the city published it.
           </p>
         </div>
       </section>
@@ -244,10 +251,10 @@ export default function Home() {
 
       <section id="get-list" style={{ padding: "72px 0" }}>
         <div className="wrap" style={{ maxWidth: 640 }}>
-          <h2 style={h2}>Get next Monday&apos;s list free.</h2>
+          <h2 style={h2}>Get next Monday list free.</h2>
           <GetListForm />
           <p style={{ ...muted, marginTop: 18 }}>
-            Or just text <a href="tel:5414252008">541-425-2008</a> and say what you do.
+            Or skip the form. <TextJoeyLink>Text Joey</TextJoeyLink>.
           </p>
         </div>
       </section>
@@ -256,11 +263,14 @@ export default function Home() {
         <div className="wrap">
           <strong style={{ color: "#fff" }}>Northwest Estate Cleanouts</strong> · Salem, Oregon
           <br />
+          Joey McVeigh
+          <br />
           <a href="tel:5414252008">541-425-2008</a> ·{" "}
           <a href="mailto:joeymcveigh150@gmail.com">joeymcveigh150@gmail.com</a>
           <p style={{ marginTop: 12 }}>Not a lead mill. Public permits, one town.</p>
         </div>
       </footer>
+      <StickyMobileBar />
     </>
   );
 }
