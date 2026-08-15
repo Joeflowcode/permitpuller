@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Permit {
+  id         String   @id @default(cuid())
+  city       String
+  address    String
+  permitType String
+  work       String
+  applicant  String
+  issuedOn   String
+  sourceUrl  String   @default("")
+  status     String
+  trades     String   @default("[]")
+  override   Boolean  @default(false)
+  notes      String   @default("")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
