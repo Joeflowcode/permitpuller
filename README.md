@@ -15,6 +15,7 @@ npm run dev
 
 - Public site: http://localhost:3000
 - Admin: http://localhost:3000/admin
+- Live site: https://salem-permit-list.netlify.app
 
 ## What it does
 

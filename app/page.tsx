@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import { GetListForm } from "./get-list-form";
 
 export default function Home() {
   return (
@@ -244,36 +245,7 @@ export default function Home() {
       <section id="get-list" style={{ padding: "72px 0" }}>
         <div className="wrap" style={{ maxWidth: 640 }}>
           <h2 style={h2}>Get next Monday&apos;s list free.</h2>
-          <form
-            action="mailto:joeymcveigh150@gmail.com?subject=PERMIT LIST"
-            method="post"
-            encType="text/plain"
-            style={{ ...card, padding: 24 }}
-          >
-            <label style={label}>
-              Name
-              <input name="Name" required style={input} />
-            </label>
-            <label style={label}>
-              Trade
-              <select name="Trade" required style={input} defaultValue="Flooring">
-                <option>Flooring</option>
-                <option>HVAC</option>
-                <option>Fence</option>
-                <option>Paint</option>
-                <option>Landscape</option>
-                <option>Windows</option>
-                <option>Other</option>
-              </select>
-            </label>
-            <label style={label}>
-              Email or phone
-              <input name="Email or phone" required style={input} />
-            </label>
-            <button className="btn btn-dark" type="submit" style={{ marginTop: 12, width: "100%" }}>
-              Email Joey
-            </button>
-          </form>
+          <GetListForm />
           <p style={{ ...muted, marginTop: 18 }}>
             Or just text <a href="tel:5414252008">541-425-2008</a> and say what you do.
           </p>
@@ -332,19 +304,6 @@ const th: CSSProperties = {
 const td: CSSProperties = {
   padding: "12px 14px",
   borderBottom: "1px solid #eee8dc",
-};
-
-const label: CSSProperties = { display: "block", fontWeight: 700, margin: "0 0 14px" };
-
-const input: CSSProperties = {
-  display: "block",
-  width: "100%",
-  marginTop: 6,
-  padding: "12px",
-  border: "1px solid #ccc4b6",
-  borderRadius: 6,
-  font: "inherit",
-  background: "#fff",
 };
 
 const faqs = [

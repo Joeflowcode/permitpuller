@@ -7,5 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: "/admin",
     },
+    sitemap: "https://salem-permit-list.netlify.app/sitemap.xml",
   };
 }
